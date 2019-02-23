@@ -1,0 +1,477 @@
+    job.setOutputValueClass(IntWritable.class);
+                            ^
+  symbol:   class IntWritable
+  location: class WordCount
+WordCount.java:57: error: cannot find symbol
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+                                          ^
+  symbol:   class Path
+  location: class WordCount
+WordCount.java:57: error: cannot find symbol
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+    ^
+  symbol:   variable FileInputFormat
+  location: class WordCount
+WordCount.java:58: error: cannot find symbol
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+                                            ^
+  symbol:   class Path
+  location: class WordCount
+WordCount.java:58: error: cannot find symbol
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    ^
+  symbol:   variable FileOutputFormat
+  location: class WordCount
+40 errors
+[cloudera@quickstart WordCountTutorial]$ javac -classpath ${HADOOP_CLASSPATH} -d '/home/cloudera/WordCountTutorial/Tutorial_classes'  WordCount.java
+WordCount.java:4: error: package org.apache.hadoop.conf does not exist
+import org.apache.hadoop.conf.Configuration;
+                             ^
+WordCount.java:5: error: package org.apache.hadoop.fs does not exist
+import org.apache.hadoop.fs.Path;
+                           ^
+WordCount.java:6: error: package org.apache.hadoop.io does not exist
+import org.apache.hadoop.io.IntWritable;
+                           ^
+WordCount.java:7: error: package org.apache.hadoop.io does not exist
+import org.apache.hadoop.io.Text;
+                           ^
+WordCount.java:8: error: package org.apache.hadoop.mapreduce does not exist
+import org.apache.hadoop.mapreduce.Job;
+                                  ^
+WordCount.java:9: error: package org.apache.hadoop.mapreduce does not exist
+import org.apache.hadoop.mapreduce.Mapper;
+                                  ^
+WordCount.java:10: error: package org.apache.hadoop.mapreduce does not exist
+import org.apache.hadoop.mapreduce.Reducer;
+                                  ^
+WordCount.java:11: error: package org.apache.hadoop.mapreduce.lib.input does not exist
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+                                            ^
+WordCount.java:12: error: package org.apache.hadoop.mapreduce.lib.output does not exist
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+                                             ^
+WordCount.java:17: error: cannot find symbol
+       extends Mapper<Object, Text, Text, IntWritable>{
+               ^
+  symbol:   class Mapper
+  location: class WordCount
+WordCount.java:17: error: cannot find symbol
+       extends Mapper<Object, Text, Text, IntWritable>{
+                              ^
+  symbol:   class Text
+  location: class WordCount
+WordCount.java:17: error: cannot find symbol
+       extends Mapper<Object, Text, Text, IntWritable>{
+                                    ^
+  symbol:   class Text
+  location: class WordCount
+WordCount.java:17: error: cannot find symbol
+       extends Mapper<Object, Text, Text, IntWritable>{
+                                          ^
+  symbol:   class IntWritable
+  location: class WordCount
+WordCount.java:19: error: cannot find symbol
+    private final static IntWritable one = new IntWritable(1);
+                         ^
+  symbol:   class IntWritable
+  location: class TokenizerMapper
+WordCount.java:20: error: cannot find symbol
+    private Text word = new Text();
+            ^
+  symbol:   class Text
+  location: class TokenizerMapper
+WordCount.java:22: error: cannot find symbol
+    public void map(Object key, Text value, Context context
+                                ^
+  symbol:   class Text
+  location: class TokenizerMapper
+WordCount.java:22: error: cannot find symbol
+    public void map(Object key, Text value, Context context
+                                            ^
+  symbol:   class Context
+  location: class TokenizerMapper
+WordCount.java:33: error: cannot find symbol
+       extends Reducer<Text,IntWritable,Text,IntWritable> {
+               ^
+  symbol:   class Reducer
+  location: class WordCount
+WordCount.java:33: error: cannot find symbol
+       extends Reducer<Text,IntWritable,Text,IntWritable> {
+                       ^
+  symbol:   class Text
+  location: class WordCount
+WordCount.java:33: error: cannot find symbol
+       extends Reducer<Text,IntWritable,Text,IntWritable> {
+                            ^
+  symbol:   class IntWritable
+  location: class WordCount
+WordCount.java:33: error: cannot find symbol
+       extends Reducer<Text,IntWritable,Text,IntWritable> {
+                                        ^
+  symbol:   class Text
+  location: class WordCount
+WordCount.java:33: error: cannot find symbol
+       extends Reducer<Text,IntWritable,Text,IntWritable> {
+                                             ^
+  symbol:   class IntWritable
+  location: class WordCount
+WordCount.java:34: error: cannot find symbol
+    private IntWritable result = new IntWritable();
+            ^
+  symbol:   class IntWritable
+  location: class IntSumReducer
+WordCount.java:36: error: cannot find symbol
+    public void reduce(Text key, Iterable<IntWritable> values,
+                       ^
+  symbol:   class Text
+  location: class IntSumReducer
+WordCount.java:36: error: cannot find symbol
+    public void reduce(Text key, Iterable<IntWritable> values,
+                                          ^
+  symbol:   class IntWritable
+  location: class IntSumReducer
+WordCount.java:37: error: cannot find symbol
+                       Context context
+                       ^
+  symbol:   class Context
+  location: class IntSumReducer
+WordCount.java:19: error: cannot find symbol
+    private final static IntWritable one = new IntWritable(1);
+                                               ^
+  symbol:   class IntWritable
+  location: class TokenizerMapper
+WordCount.java:20: error: cannot find symbol
+    private Text word = new Text();
+                            ^
+  symbol:   class Text
+  location: class TokenizerMapper
+WordCount.java:34: error: cannot find symbol
+    private IntWritable result = new IntWritable();
+                                     ^
+  symbol:   class IntWritable
+  location: class IntSumReducer
+WordCount.java:40: error: cannot find symbol
+      for (IntWritable val : values) {
+           ^
+  symbol:   class IntWritable
+  location: class IntSumReducer
+WordCount.java:49: error: cannot find symbol
+    Configuration conf = new Configuration();
+    ^
+  symbol:   class Configuration
+  location: class WordCount
+WordCount.java:49: error: cannot find symbol
+    Configuration conf = new Configuration();
+                             ^
+  symbol:   class Configuration
+  location: class WordCount
+WordCount.java:50: error: cannot find symbol
+    Job job = Job.getInstance(conf, "word count");
+    ^
+  symbol:   class Job
+  location: class WordCount
+WordCount.java:50: error: cannot find symbol
+    Job job = Job.getInstance(conf, "word count");
+              ^
+  symbol:   variable Job
+  location: class WordCount
+WordCount.java:55: error: cannot find symbol
+    job.setOutputKeyClass(Text.class);
+                          ^
+  symbol:   class Text
+  location: class WordCount
+WordCount.java:56: error: cannot find symbol
+    job.setOutputValueClass(IntWritable.class);
+                            ^
+  symbol:   class IntWritable
+  location: class WordCount
+WordCount.java:57: error: cannot find symbol
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+                                          ^
+  symbol:   class Path
+  location: class WordCount
+WordCount.java:57: error: cannot find symbol
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+    ^
+  symbol:   variable FileInputFormat
+  location: class WordCount
+WordCount.java:58: error: cannot find symbol
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+                                            ^
+  symbol:   class Path
+  location: class WordCount
+WordCount.java:58: error: cannot find symbol
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    ^
+  symbol:   variable FileOutputFormat
+  location: class WordCount
+40 errors
+[cloudera@quickstart WordCountTutorial]$ javac WordCount.java -cp $(hadoop classpath)
+[cloudera@quickstart WordCountTutorial]$ jar -cvf wc.jar -c /
+-c : no such file or directory
+/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/0 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/1 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/2 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fd/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/fdinfo/6 : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.mozilla/firefox/cloudera/lock : no such file or directory
+/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/proc/self/task/11760/root/home/cloudera/.pulse/b583246d032c70336cbf004a00000006-runtime/native : no such file or directory
+^Z
+[1]+  Stopped                 jar -cvf wc.jar -c /
+[cloudera@quickstart WordCountTutorial]$ jar -cvf wc.jar -c Tutorial_classes/
+-c : no such file or directory
+added manifest
+adding: Tutorial_classes/(in = 0) (out= 0)(stored 0%)
+adding: Tutorial_classes/WordCount$TokenizerMapper.class(in = 1736) (out= 754)(deflated 56%)
+adding: Tutorial_classes/WordCount$IntSumReducer.class(in = 1739) (out= 739)(deflated 57%)
+adding: Tutorial_classes/WordCount.class(in = 1501) (out= 811)(deflated 45%)
+[cloudera@quickstart WordCountTutorial]$ jar -cvf wc.jar -c /Tutorial_classes/
+-c : no such file or directory
+/Tutorial_classes : no such file or directory
+added manifest
+[cloudera@quickstart WordCountTutorial]$ cd '/home/cloudera/WordCountTutorial/Tutorial_classes' 
+[cloudera@quickstart Tutorial_classes]$ jar -cvf wc.jar WordCount*.class
+added manifest
+adding: WordCount.class(in = 1501) (out= 811)(deflated 45%)
+adding: WordCount$IntSumReducer.class(in = 1739) (out= 739)(deflated 57%)
+adding: WordCount$TokenizerMapper.class(in = 1736) (out= 754)(deflated 56%)
+[cloudera@quickstart Tutorial_classes]$ hdfs jar '/home/cloudera/WordCountTutorial/wc.jar' WordCount /WordCountTutorial/Input/twitterhashtagsurlsdata.txt /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart Tutorial_classes]$ hdfs jar wc.jar WordCount /WordCountTutorial/Input/twitterhashtagsurlsdata.txt /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart Tutorial_classes]$ hdfs jar wc.jar WordCount /WordCountTutorial/Input /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart Tutorial_classes]$ cd '/home/cloudera/WordCountTutorial' 
+[cloudera@quickstart WordCountTutorial]$ hdfs jar wc.jar WordCount /WordCountTutorial/Input/twitterhashtagsurlsdata.txt /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart WordCountTutorial]$ hdfs jar 'wc.jar' WordCount /WordCountTutorial/Input/twitterhashtagsurlsdata.txt /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart WordCountTutorial]$ hdfs jar 'wc.jar' WordCount /WordCountTutorial/Input/ /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart WordCountTutorial]$ jar cfm wc.jar MAINFEST.MF /Tutorial_Classes
+java.io.FileNotFoundException: MAINFEST.MF (No such file or directory)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:146)
+	at java.io.FileInputStream.<init>(FileInputStream.java:101)
+	at sun.tools.jar.Main.run(Main.java:171)
+	at sun.tools.jar.Main.main(Main.java:1177)
+[cloudera@quickstart WordCountTutorial]$ jar cfm wc.jar
+Usage: jar {ctxui}[vfm0Me] [jar-file] [manifest-file] [entry-point] [-C dir] files ...
+Options:
+    -c  create new archive
+    -t  list table of contents for archive
+    -x  extract named (or all) files from archive
+    -u  update existing archive
+    -v  generate verbose output on standard output
+    -f  specify archive file name
+    -m  include manifest information from specified manifest file
+    -e  specify application entry point for stand-alone application 
+        bundled into an executable jar file
+    -0  store only; use no ZIP compression
+    -M  do not create a manifest file for the entries
+    -i  generate index information for the specified jar files
+    -C  change to the specified directory and include the following file
+If any file is a directory then it is processed recursively.
+The manifest file name, the archive file name and the entry point name are
+specified in the same order as the 'm', 'f' and 'e' flags.
+
+Example 1: to archive two class files into an archive called classes.jar: 
+       jar cvf classes.jar Foo.class Bar.class 
+Example 2: use an existing manifest file 'mymanifest' and archive all the
+           files in the foo/ directory into 'classes.jar': 
+       jar cvfm classes.jar mymanifest -C foo/ .
+
+[cloudera@quickstart WordCountTutorial]$ hdfs dfs -jar wc.jar WordCount /WordCountTutorial/Input/twitterhashtagsurlsdata.txt /WordCountTutorial/Output
+-jar: Unknown command
+[cloudera@quickstart WordCountTutorial]$ hdfs dfs -jar wc.jar  /WordCountTutorial/Input/twitterhashtagsurlsdata.txt /WordCountTutorial/Output
+-jar: Unknown command
+[cloudera@quickstart WordCountTutorial]$ hdfs jar wc.jar WordCount /WordCountTutorial/Input /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart WordCountTutorial]$ hdfs jar wc.jar WordCount /WordCountTutorial/Input /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart WordCountTutorial]$ hdfs jar wc.jar WordCount /WordCountTutorial/Input /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart WordCountTutorial]$ hdfs jar wc.jar WordCount /WordCountTutorial/Input /WordCountTutorial/Output
+Error: Could not find or load main class jar
+[cloudera@quickstart WordCountTutorial]$ hadoop jar wc.jar WordCount /WordCountTutorial/Input /WordCountTutorial/Output
+19/02/21 23:47:20 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+19/02/21 23:47:20 WARN security.UserGroupInformation: PriviledgedActionException as:cloudera (auth:SIMPLE) cause:org.apache.hadoop.mapred.FileAlreadyExistsException: Output directory hdfs://quickstart.cloudera:8020/WordCountTutorial/Output already exists
+Exception in thread "main" org.apache.hadoop.mapred.FileAlreadyExistsException: Output directory hdfs://quickstart.cloudera:8020/WordCountTutorial/Output already exists
+	at org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.checkOutputSpecs(FileOutputFormat.java:146)
+	at org.apache.hadoop.mapreduce.JobSubmitter.checkSpecs(JobSubmitter.java:270)
+	at org.apache.hadoop.mapreduce.JobSubmitter.submitJobInternal(JobSubmitter.java:143)
+	at org.apache.hadoop.mapreduce.Job$10.run(Job.java:1307)
+	at org.apache.hadoop.mapreduce.Job$10.run(Job.java:1304)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:415)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1917)
+	at org.apache.hadoop.mapreduce.Job.submit(Job.java:1304)
+	at org.apache.hadoop.mapreduce.Job.waitForCompletion(Job.java:1325)
+	at WordCount.main(WordCount.java:59)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+[cloudera@quickstart WordCountTutorial]$ hadoop jar wc.jar WordCount /WordCountTutorial/Input /WordCountTutorial/out
+19/02/21 23:47:49 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+19/02/21 23:47:50 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+19/02/21 23:47:50 INFO input.FileInputFormat: Total input paths to process : 2
+19/02/21 23:47:50 WARN hdfs.DFSClient: Caught exception 
+java.lang.InterruptedException
+	at java.lang.Object.wait(Native Method)
+	at java.lang.Thread.join(Thread.java:1281)
+	at java.lang.Thread.join(Thread.java:1355)
+	at org.apache.hadoop.hdfs.DFSOutputStream$DataStreamer.closeResponder(DFSOutputStream.java:967)
+	at org.apache.hadoop.hdfs.DFSOutputStream$DataStreamer.endBlock(DFSOutputStream.java:705)
+	at org.apache.hadoop.hdfs.DFSOutputStream$DataStreamer.run(DFSOutputStream.java:894)
+19/02/21 23:47:50 INFO mapreduce.JobSubmitter: number of splits:2
+19/02/21 23:47:51 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1550817025123_0001
+19/02/21 23:47:52 INFO impl.YarnClientImpl: Submitted application application_1550817025123_0001
+19/02/21 23:47:52 INFO mapreduce.Job: The url to track the job: http://quickstart.cloudera:8088/proxy/application_1550817025123_0001/
+19/02/21 23:47:52 INFO mapreduce.Job: Running job: job_1550817025123_0001
+19/02/21 23:48:14 INFO mapreduce.Job: Job job_1550817025123_0001 running in uber mode : false
+19/02/21 23:48:14 INFO mapreduce.Job:  map 0% reduce 0%
+19/02/21 23:48:40 INFO mapreduce.Job:  map 50% reduce 0%
+19/02/21 23:48:42 INFO mapreduce.Job:  map 100% reduce 0%
+19/02/21 23:48:53 INFO mapreduce.Job:  map 100% reduce 100%
+19/02/21 23:48:53 INFO mapreduce.Job: Job job_1550817025123_0001 completed successfully
+19/02/21 23:48:54 INFO mapreduce.Job: Counters: 50
+	File System Counters
+		FILE: Number of bytes read=165377
+		FILE: Number of bytes written=760875
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=461372
+		HDFS: Number of bytes written=154755
+		HDFS: Number of read operations=9
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Killed map tasks=1
+		Launched map tasks=2
+		Launched reduce tasks=1
+		Data-local map tasks=2
+		Total time spent by all maps in occupied slots (ms)=49361
+		Total time spent by all reduces in occupied slots (ms)=10059
+		Total time spent by all map tasks (ms)=49361
+		Total time spent by all reduce tasks (ms)=10059
+		Total vcore-milliseconds taken by all map tasks=49361
+		Total vcore-milliseconds taken by all reduce tasks=10059
+		Total megabyte-milliseconds taken by all map tasks=50545664
+		Total megabyte-milliseconds taken by all reduce tasks=10300416
+	Map-Reduce Framework
+		Map input records=13070
+		Map output records=28169
+		Map output bytes=574444
+		Map output materialized bytes=165383
+		Input split bytes=282
+		Combine input records=28169
+		Combine output records=2551
+		Reduce input groups=2551
+		Reduce shuffle bytes=165383
+		Reduce input records=2551
+		Reduce output records=2551
+		Spilled Records=5102
+		Shuffled Maps =2
+		Failed Shuffles=0
+		Merged Map outputs=2
+		GC time elapsed (ms)=611
+		CPU time spent (ms)=4770
+		Physical memory (bytes) snapshot=548265984
+		Virtual memory (bytes) snapshot=4519743488
+		Total committed heap usage (bytes)=391979008
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=461090
+	File Output Format Counters 
+		Bytes Written=154755
+[cloudera@quickstart WordCountTutorial]$ 

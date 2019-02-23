@@ -1,0 +1,25 @@
+[cloudera@quickstart ~]$ pwd
+/home/cloudera
+[cloudera@quickstart ~]$ ls
+cloudera-manager  cm_api.py  Desktop  Documents  Downloads  eclipse  enterprise-deployment.json  express-deployment.json  kerberos  lib  Music  parcels  Pictures  Public  Templates  twitterdata.txt  Videos  workspace
+[cloudera@quickstart ~]$ hdfs dfs -put /home/cludera/twitterdata.txt /user/cloudera/
+put: `/home/cludera/twitterdata.txt': No such file or directory
+[cloudera@quickstart ~]$ hdfs dfs -put /home/cloudera/twitterdata.txt /user/cloudera/
+put: `/user/cloudera/twitterdata.txt': File exists
+[cloudera@quickstart ~]$ hdfs dfs -ls /user/cloudera
+Found 1 items
+-rw-r--r--   1 cloudera cloudera     460965 2019-02-21 12:52 /user/cloudera/twitterdata.txt
+[cloudera@quickstart ~]$  spark-shell
+
+
+scala> val loadTwitterData=sc.textFile("/user/cloudera/twitterdata.txt")
+loadTwitterData: org.apache.spark.rdd.RDD[String] = /user/cloudera/twitterdata.txt MapPartitionsRDD[1] at textFile at <console>:27
+
+scala> val WordCountspark= loadTwitterData.flatMap(line => line.split(" ")).map(word => (word,1)).reduceByKey(_ + _)
+WordCountspark: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[4] at reduceByKey at <console>:29
+
+scala> val WordCountData= loadTwitterData.flatMap(line => line.split(" ")).map(word => (word,1)).reduceByKey(_ + _)
+WordCountData: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[7] at reduceByKey at <console>:29
+
+scala> WordCountData.saveAsTextFile("/user/cloudera/sparkoutput.txt")
+
