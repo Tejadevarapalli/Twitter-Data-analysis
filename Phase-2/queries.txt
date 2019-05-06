@@ -1,0 +1,486 @@
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+import org.apache.spark.sql.catalyst.plans.logical.Union
+import org.apache.spark.sql.types.{DateType, FloatType}
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder
+import org.apache.spark.sql.Encoder
+import org.apache.spark.sql.Row
+import org.apache.spark.sql.types.{StructType, StructField, StringType}
+import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.SQLContext._
+import org.apache.spark.{SparkContext, SparkConf}
+// For implicit conversions from RDDs to DataFrames
+import scala.io.Source
+
+object queries {
+  def main(args: Array[String]) {
+
+    val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
+
+    val sc = new SparkContext(sparkConf)
+
+    // Contains SQLContext which is necessary to execute SQL queries
+    val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+
+    // Reads json file and stores in a variable
+    val tweet = sqlContext.read.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\GOTextraction.json")
+    val outputFile = "C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\outputfile"
+    //To register tweets data as a table
+    tweet.createOrReplaceTempView("tweets")
+    val disCat = sqlContext.sql("select Username,loc,created_at,"+
+      "CASE WHEN text like '%aryastark%' THEN 'AryaStark'" +
+      "WHEN text like '%sansastark%' THEN 'SansaStark'" +
+      "WHEN text like '%jonsnow%' THEN 'JonSnow'" +
+      "WHEN text like '%tyrionlannister%' THEN 'Tyrion Lannister'" +
+      "WHEN text like '%branstark%' THEN 'BranStark'" +
+      "WHEN text like '%daenerys%' THEN 'Daenerys'" +
+      "WHEN text like '%jaimelannister%' THEN 'JaimeLannister'" +
+      "WHEN text like '%nightking%' THEN 'NightKing'" +
+      "END AS GOTcharacters from (select user.screen_name as UserName,user.location as loc,lower(replace(text,'"+ "','')) as text,created_at from tweets where text is not null)")
+    disCat.createOrReplaceTempView("disCat2")
+
+    println("Enter any one of the following query to get data")
+    println("1.Query-1:This query fetches the tweets count on hashtags")
+    println("2.Query-2:Which user tweeted most about which type of team")
+    println("3.Query-3:Tweets from different countries about ipl")
+    println("4.Query-4:On which day more tweets are done")
+    println("5.Query-5:This query fetches Tweets count for different types of GOTCharacterss")
+    println("6.Query-6:Popular languages used for tweeting tweets about ipl")
+    println("7.Query-7:Number of tweets for particular date ")
+    println("8.Query-8:Account Verification tweets")
+    println("9.Query-9:On Which hours More Tweets Were Done")
+    println("10.Query-10:Which state is mostly having tweets about ipl")
+    println("Enter any one of the following query to get data:")
+    val count = scala.io.StdIn.readLine()
+    count match {
+      case "1" =>
+        /*--------------------Query 1: This query fetches the tweets on hashtags-----------------------*/
+        val hashtag = sqlContext.sql("SELECT LOWER(hashtags.text) As Hashtags, COUNT(*) AS total_count FROM tweets LATERAL VIEW EXPLODE(entities.hashtags) t1 AS hashtags GROUP BY LOWER(hashtags.text) ORDER BY total_count DESC LIMIT 20")
+
+        hashtag.show()
+        println("********************************************")
+        println("Number of tweets on different types of hashtags")
+        println("********************************************")
+        hashtag.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query1")
+
+
+      /*-----------------------------Query 2:  Which user tweeted most about which GOTCharacters--------------------------------------------*/
+      case "2" =>
+
+        val r1 = sqlContext.sql("SELECT UserName,GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters in ('AryaStark') group by UserName,GOTCharacters order by count desc")
+      //  val r2 = sqlContext.sql("SELECT UserName,'SansaStark' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='SansaStark' " +
+        //  "group by UserName order by count desc limit 1 ")
+//        val r3 = sqlContext.sql("SELECT UserName,'JonSnow' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='JonSnow' " +
+//          "group by UserName order by count desc limit 1 ")
+//        val r4 = sqlContext.sql("SELECT UserName,'TyrionLannister' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='TyrionLannister' " +
+//          "group by UserName order by count desc limit 1 ")
+//        val r5 = sqlContext.sql("SELECT UserName,'BranStark' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='BranStark' " +
+//          "group by UserName order by count desc limit 1 ")
+//        val r6 = sqlContext.sql("SELECT UserName,'Daenerys' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='Daenerys' " +
+//          "group by UserName order by count desc limit 1 ")
+//        val r7 = sqlContext.sql("SELECT UserName,'JaimeLannister' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='JaimeLannister' " +
+//          "group by UserName order by count desc limit 1 ")
+//        val r8 = sqlContext.sql("SELECT UserName,'NightKing' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='NightKing' " +
+//          "group by UserName order by count desc limit 1 ")
+
+        val rdd1 = r1//.union(r2).union(r3).union(r4).union(r5).union(r6).union(r7).union(r8)
+
+        println("****************************************")
+        println("Which user tweeted more on which type of Character")
+        println("****************************************")
+        rdd1.show()
+        rdd1.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query2")
+
+      /*-----------------------------------Query 3: Tweets from different countries about GOT -------------------------------------*/
+      case "3" =>
+        val countrytweetscount=sqlContext.sql("SELECT distinct place.country, count(*) as count FROM tweets where place.country is not null " + "GROUP BY place.country ORDER BY count DESC")
+        countrytweetscount.createOrReplaceTempView("countrytweetscount")
+        println("****************************************")
+        println("Tweets from different countries")
+        println("****************************************")
+        countrytweetscount.show()
+        countrytweetscount.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query3")
+
+      /*-------------------------------Query 4 : On which Day More Tweets are posted-----------------------------------*/
+      case "4" =>
+        val day_data = sqlContext.sql("SELECT substring(user.created_at,1,3) as day from tweets where text is not null")
+
+        day_data.createOrReplaceTempView("day_data")
+
+        val days_final = sqlContext.sql(
+          """ SELECT Case
+            |when day LIKE '%Mon%' then 'WEEKDAY'
+            |when day LIKE '%Tue%' then 'WEEKDAY'
+            |when day LIKE '%Wed%' then 'WEEKDAY'
+            |when day LIKE '%Thu%' then 'WEEKDAY'
+            |when day LIKE '%Fri%' then 'WEEKDAY'
+            |when day LIKE '%Sat%' then 'WEEKEND'
+            |when day LIKE '%Sun%' then 'WEEKEND'
+            | else
+            | null
+            | end as day1 from day_data where day is not null""".stripMargin)
+
+        days_final.createOrReplaceTempView("days_final")
+
+        val res = sqlContext.sql("SELECT day1 as Day,Count(*) as Day_Count from days_final where day1 is not null group by day1 order by count(*) desc")
+
+        println ("**********************************")
+        println("On Which Day More Tweets Were Done")
+        println("**********************************")
+        res.show()
+        res.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query4")
+
+      /*-----------------------------------Query 5: Tweets count for different types of characters -------------------------------------*/
+      case "5" =>
+        val r1 = sqlContext.sql("select loc,GotCharacters,count(*) as count from disCat2 " +
+          "group by loc,GotCharacters order by count desc")
+//        val r2 = sqlContext.sql("SELECT loc,'SansaStark' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='SansaStark' " +
+//          "group by loc order by count desc limit 10")
+//        val r3 = sqlContext.sql("SELECT loc,'JonSnow' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='JonSnow' " +
+//          "group by loc order by count desc limit 10")
+//        val r4 = sqlContext.sql("SELECT loc,'TyrionLannister' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='TyrionLannister' " +
+//          "group by loc order by count desc limit 10")
+//        val r5 = sqlContext.sql("SELECT loc,'BranStark' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='BranStark' " +
+//          "group by loc order by count desc limit 10")
+//        val r6 = sqlContext.sql("SELECT loc,'Daenerys' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='Daenerys' " +
+//          "group by loc order by count desc limit 10")
+//        val r7 = sqlContext.sql("SELECT loc,'JaimeLannister' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='JaimeLannister' " +
+//          "group by loc order by count desc limit 10")
+//        val r8 = sqlContext.sql("SELECT loc,'NightKing' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='NightKing' " +
+//          "group by loc order by count desc limit 10")
+        val rdd1 = r1//.union(r2).union(r3).union(r4).union(r5).union(r6).union(r7).union(r8)
+        rdd1.createOrReplaceTempView("rdd1")
+        val res=sqlContext.sql("SELECT GOTCharacters, Count(*) as Count from rdd1 where GOTCharacters is not null group by GOTCharacters")
+        println("****************************************")
+        println("GOTCharacters")
+        println("****************************************")
+        res.show()
+        res.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query5")
+
+      /*-----------------------------------Query 6 Popular languages used for tweeting tweets about GOT -------------------------------------*/
+      case "6" =>
+        val langWstCount = sqlContext.sql("SELECT distinct id," +
+          "CASE when user.lang LIKE '%en%' then 'English'"+
+          "when user.lang LIKE '%ja%' then 'Japanese'"+
+          "when user.lang LIKE '%es%' then 'Spanish'"+
+          "when user.lang LIKE '%fr%' then 'French'"+
+          "when user.lang LIKE '%it%' then 'Italian'"+
+          "when user.lang LIKE '%ru%' then 'Russian'"+
+          "when user.lang LIKE '%ar%' then 'Arabic'"+
+          "when user.lang LIKE '%bn%' then 'Bengali'"+
+          "when user.lang LIKE '%cs%' then 'Czech'"+
+          "when user.lang LIKE '%da%' then 'Danish'"+
+          "when user.lang LIKE '%de%' then 'German'"+
+          "when user.lang LIKE '%el%' then 'Greek'"+
+          "when user.lang LIKE '%fa%' then 'Persian'"+
+          "when user.lang LIKE '%fi%' then 'Finnish'"+
+          "when user.lang LIKE '%fil%' then 'Filipino'"+
+          "when user.lang LIKE '%he%' then 'Hebrew'"+
+          "when user.lang LIKE '%hi%' then 'Hindi'"+
+          "when user.lang LIKE '%hu%' then 'Hungarian'"+
+          "when user.lang LIKE '%id%' then 'Indonesian'"+
+          "when user.lang LIKE '%ko%' then 'Korean'"+
+          "when user.lang LIKE '%msa%' then 'Malay'"+
+          "when user.lang LIKE '%nl%' then 'Dutch'"+
+          "when user.lang LIKE '%no%' then 'Norwegian'"+
+          "when user.lang LIKE '%pl%' then 'Polish'"+
+          "when user.lang LIKE '%pt%' then 'Portuguese'"+
+          "when user.lang LIKE '%ro%' then 'Romanian'"+
+          "when user.lang LIKE '%sv%' then 'Swedish'"+
+          "when user.lang LIKE '%th%' then 'Thai'"+
+          "when user.lang LIKE '%tr%' then 'Turkish'"+
+          "when user.lang LIKE '%uk%' then 'Ukrainian'"+
+          "when user.lang LIKE '%ur%' then 'Urdu'"+
+          "when user.lang LIKE '%vi%' then 'Vietnamese'"+
+          "when user.lang LIKE '%zh-cn%' then 'Chinese (Simplified)'"+
+          "when user.lang LIKE '%zh-tw%' then 'Chinese (Traditional)'"+
+          "END AS language from tweets where text is not null")
+        langWstCount.createOrReplaceTempView("langWstCount")
+        var langWstDataCount=sqlContext.sql("SELECT language, Count(language) as Count from langWstCount where id is NOT NULL and language is not null group by language order by Count DESC")
+
+        println("****************************************")
+        println("Language")
+        println("****************************************")
+        langWstDataCount.show()
+        langWstDataCount.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query6")
+      /*-----------------------------------Query 7 number of tweets for particular date  -------------------------------------*/
+      case "7" =>
+        val retweetcount=sqlContext.sql("SELECT user.screen_name, COUNT(*) as total FROM tweets WHERE retweeted_status.user is not null GROUP BY user.screen_name ORDER BY total desc LIMIT 5")
+        retweetcount.createOrReplaceTempView("retweetcount")
+        println("****************************************")
+        println("retweet Count")
+        println("****************************************")
+        retweetcount.show()
+        retweetcount.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query7")
+      /*-----------------------------------Query 8 Account Verification tweets -------------------------------------*/
+      case "8" =>
+        val acctVerify=sqlContext.sql("SELECT distinct id, " +
+          "CASE when user.verified LIKE '%true%' THEN 'VERIFIED ACCOUNT'"+
+          "when user.verified LIKE '%false%' THEN 'NON-VERIFIED ACCOUNT'"+
+          "END AS Verified from tweets where text is not null")
+        acctVerify.createOrReplaceTempView("acctVerify")
+        //        var acctVerifydata=sqlContext.sql("SELECT  Verified, Count(Verified) as Count from acctVerify where id is NOT NULL and Verified is not null group by Verified order by Count DESC")
+        var acctVerifydata=sqlContext.sql("select sum(case when user.verified = true then 1 else 0 end)Verified,sum(case when user.verified = false then 1 else 0 end)Unverified from tweets")
+        println("****************************************")
+        println("Account Verification")
+        println("****************************************")
+        acctVerifydata.show()
+        acctVerifydata.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query8")
+
+      /*-----------------------------------Query 9 On Which hours More Tweets Were Done -------------------------------------*/
+      case "9" =>
+        val timehour = sqlContext.sql("SELECT SUBSTRING(created_at,12,2) as hour from tweets where text is not null")
+
+        timehour.createOrReplaceTempView("timehour")
+
+        val timeAnalysis=sqlContext.sql(""" SELECT Case
+            |when hour>=0 and hour <4 then 'midnight'
+            |when hour>=4 and hour <7 then 'earlymorning'
+            |when hour>=7 and hour <12 then 'Day-time'
+            |when hour>=12 and hour <15 then 'afternoon'
+            |when hour>=15 and hour <18 then 'evening'
+            |when hour>=18 and hour <=23 then 'Night-time'
+            end as time from timehour""".stripMargin)
+
+        timeAnalysis.createOrReplaceTempView("timeAnalysis")
+
+        val res = sqlContext.sql("SELECT time as hour,Count(*) as tweets_count from timeAnalysis where time is not null group by time order by count(*) desc")
+
+        println ("**********************************")
+        println("On Which hours More Tweets Were Done")
+        println("**********************************")
+        res.show()
+        res.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query9")
+
+      /*-----------------------------------Query 10 Different types of tweets from different states -------------------------------------*/
+      case "10" =>
+        val AryaStarkRDD =  sqlContext.sql(""" SELECT 'AryaStark' as GOTCharacters, user.location as loc from tweets where text LIKE '%#AryaStark%' """)
+        //val NightKingRDD =  sqlContext.sql(""" SELECT 'NightKing' as GOTcharacter, user.location as loc from tweets where text LIKE '%#NightKing%' """)
+        //val JonSnowRDD =  sqlContext.sql(""" SELECT 'JonSnow' as GOTcharacter, user.location as loc from tweets where text LIKE '%#JonSnow%' """)
+       //val DaenerysRDD =  sqlContext.sql(""" SELECT 'Daenerys' as GOTCharacters, user.location as loc from tweets where text LIKE '%#Daenerys%' """)
+       // val breakRDD =  sqlContext.sql(""" SELECT 'Breakfast' as Mealtype, SUBSTRING(created_at,12,2) as hour, user.location as loc from dfs where text LIKE '%#breakfast%' """)
+     //   val brunchRDD =  sqlContext.sql(""" SELECT 'Brunch' as Mealtype, SUBSTRING(created_at,12,2) as hour, user.location as loc from dfs where text LIKE '%#brunch%' """)
+        val sql2RDD = AryaStarkRDD//.union(NightKingRDD).union(JonSnowRDD).union(DaenerysRDD)
+        sql2RDD.createOrReplaceTempView("sql2RDD")
+        val locate = sqlContext.sql(
+          """ SELECT GOTCharacters, loc from sql2RDD  where
+            |loc LIKE  '%Alaska%' OR loc LIKE  '%Arizona%' OR loc LIKE  '%Arkansas%' OR loc LIKE  '%California%' OR loc LIKE  '%Colorado%' OR loc LIKE  '%Connecticut%' OR loc LIKE  '%Delaware%'
+            |OR loc LIKE  '%Florida%'
+            |OR loc LIKE  '%Georgia%'
+            |OR loc LIKE  '%Hawaii%'
+            |OR loc LIKE  '%Idaho%'
+            |OR loc LIKE  '%Illinois%'
+            |OR loc LIKE  '%Indiana%'
+            |OR loc LIKE  '%Iowa%'
+            |OR loc LIKE  '%Kansas%'
+            |OR loc LIKE  '%Kentucky%'
+            |OR loc LIKE  '%Louisiana%'
+            |OR loc LIKE  '%Maine%'
+            |OR loc LIKE  '%Maryland%'
+            |OR loc LIKE  '%Massachusetts%'
+            |OR loc LIKE  '%Michigan%'
+            |OR loc LIKE  '%Minnesota%'
+            |OR loc LIKE  '%Mississippi%'
+            |OR loc LIKE  '%Missouri%'
+            |OR loc LIKE  '%Montana%'
+            |OR loc LIKE  '%Nebraska%'
+            |OR loc LIKE  '%Nevada%'
+            |OR loc LIKE  '%NewHampshire%'
+            |OR loc LIKE  '%NewJersey%'
+            |OR loc LIKE  '%NewMexico%'
+            |OR loc LIKE  '%NewYork%'
+            |OR loc LIKE  '%NorthCarolina%'
+            |OR loc LIKE  '%NorthDakota%'
+            |OR loc LIKE  '%Ohio%'
+            |OR loc LIKE  '%Oklahoma%'
+            |OR loc LIKE  '%Oregon%'
+            |OR loc LIKE  '%Pennsylvania%'
+            |OR loc LIKE  '%RhodeIsland%'
+            |OR loc LIKE  '%SouthCarolina%'
+            |OR loc LIKE  '%SouthDakota%'
+            |OR loc LIKE  '%Tennessee%'
+            |OR loc LIKE  '%Texas%'
+            |OR loc LIKE  '%Utah%'
+            |OR loc LIKE  '%Vermont%'
+            |OR loc LIKE  '%Virginia%'
+            |OR loc LIKE  '%Washington%'
+            |OR loc LIKE  '%WestVirginia%'
+            |OR loc LIKE  '%Wisconsin%'
+            |OR loc LIKE  '%Wyoming%'
+            |OR loc LIKE '% AL%'
+            |OR loc LIKE '% AK%'
+            |OR loc LIKE '% AZ%'
+            |OR loc LIKE '% AR%'
+            |OR loc LIKE '% CA%'
+            |OR loc LIKE '% CO%'
+            |OR loc LIKE '% CT%'
+            |OR loc LIKE '% DE%'
+            |OR loc LIKE '% FL%'
+            |OR loc LIKE '% GA%'
+            |OR loc LIKE '% HI%'
+            |OR loc LIKE '% ID%'
+            |OR loc LIKE '% IL%'
+            |OR loc LIKE '% IN%'
+            |OR loc LIKE '% IA%'
+            |OR loc LIKE '% KS%'
+            |OR loc LIKE '% KY%'
+            |OR loc LIKE '% LA%'
+            |OR loc LIKE '% ME%'
+            |OR loc LIKE '% MD%'
+            |OR loc LIKE '% MA%'
+            |OR loc LIKE '% MI%'
+            |OR loc LIKE '% MN%'
+            |OR loc LIKE '% MS%'
+            |OR loc LIKE '% MO%'
+            |OR loc LIKE '% MT%'
+            |OR loc LIKE '% NE%'
+            |OR loc LIKE '% NV%'
+            |OR loc LIKE '% NH%'
+            |OR loc LIKE '% NJ%'
+            |OR loc LIKE '% NM%'
+            |OR loc LIKE '% NY%'
+            |OR loc LIKE '% NC%'
+            |OR loc LIKE '% ND%'
+            |OR loc LIKE '% OH%'
+            |OR loc LIKE '% OK%'
+            |OR loc LIKE '% OR%'
+            |OR loc LIKE '% PA%'
+            |OR loc LIKE '% RI%'
+            |OR loc LIKE '% SC%'
+            |OR loc LIKE '% SD%'
+            |OR loc LIKE '% TN%'
+            |OR loc LIKE '% TX%'
+            |OR loc LIKE '% UT%'
+            |OR loc LIKE '% VT%'
+            |OR loc LIKE '% VA%'
+            |OR loc LIKE '% WA%'
+            |OR loc LIKE '% WV%'
+            |OR loc LIKE '% WI%'
+            |OR loc LIKE '% WY%'
+            |""".stripMargin)
+        locate.createOrReplaceTempView("locate")
+
+        val sql3RDD =  sqlContext.sql(
+          """ SELECT GOTCharacters, Case
+            |when loc LIKE '%Alaska%' then 'AK'
+            |when loc LIKE '%Arizona%' then 'AZ'
+            |when loc LIKE '%Arkansas%' then 'AR'
+            |when loc LIKE '%California%' then 'CA'
+            |when loc LIKE '%Colorado%' then 'CO'
+            |when loc LIKE '%Connecticut%' then 'CT'
+            |when loc LIKE '%Delaware%' then 'DE'
+            |when loc LIKE '%Florida%' then 'FL'
+            |when loc LIKE '%Georgia%' then 'GA'
+            |when loc LIKE '%Hawaii%' then 'HI'
+            |when loc LIKE '%Idaho%' then 'ID'
+            |when loc LIKE '%Illinois%' then 'IL'
+            |when loc LIKE '%Indiana%' then 'IN'
+            |when loc LIKE '%Iowa%' then 'IA'
+            |when loc LIKE '%Kansas%' then 'KS'
+            |when loc LIKE '%Kentucky%' then 'KY'
+            |when loc LIKE '%Louisiana%' then 'LA'
+            |when loc LIKE '%Maine%' then 'ME'
+            |when loc LIKE '%Maryland%' then 'MD'
+            |when loc LIKE '%Massachusetts%' then 'MA'
+            |when loc LIKE '%Michigan%' then 'MI'
+            |when loc LIKE '%Minnesota%' then 'MN'
+            |when loc LIKE '%Mississippi%' then 'MS'
+            |when loc LIKE '%Missouri%' then 'MO'
+            |when loc LIKE '%Montana%' then 'MT'
+            |when loc LIKE '%Nebraska%' then 'NE'
+            |when loc LIKE '%Nevada%' then 'NV'
+            |when loc LIKE '%NewHampshire%' then 'NH'
+            |when loc LIKE '%NewJersey%' then 'NJ'
+            |when loc LIKE '%NewMexico%' then 'NM'
+            |when loc LIKE '%NewYork%' then 'NY'
+            |when loc LIKE '%NorthCarolina%' then 'NC'
+            |when loc LIKE '%NorthDakota%' then 'ND'
+            |when loc LIKE '%Ohio%' then 'OH'
+            |when loc LIKE '%Oklahoma%' then 'OK'
+            |when loc LIKE '%Oregon%' then 'OR'
+            |when loc LIKE '%Pennsylvania%' then 'PA'
+            |when loc LIKE '%RhodeIsland%' then 'RI'
+            |when loc LIKE '%SouthCarolina%' then 'SC'
+            |when loc LIKE '%SouthDakota%' then 'SD'
+            |when loc LIKE '%Tennessee%' then 'TN'
+            |when loc LIKE '%Texas%' then 'TX'
+            |when loc LIKE '%Utah%' then 'UT'
+            |when loc LIKE '%Vermont%' then 'VT'
+            |when loc LIKE '%Virginia%' then 'VA'
+            |when loc LIKE '%Washington%' then 'WA'
+            |when loc LIKE '%WestVirginia%' then 'WV'
+            |when loc LIKE '%Wisconsin%' then 'WI'
+            |when loc LIKE '%Wyoming%' then 'WY'
+            |when loc LIKE '% AL%' then 'AL'
+            |when loc LIKE '% AK%' then 'AK'
+            |when loc LIKE '% AZ%' then 'AZ'
+            |when loc LIKE '% AR%' then 'AR'
+            |when loc LIKE '% CA%' then 'CA'
+            |when loc LIKE '% CO%' then 'CO'
+            |when loc LIKE '% CT%' then 'CT'
+            |when loc LIKE '% DE%' then 'DE'
+            |when loc LIKE '% FL%' then 'FL'
+            |when loc LIKE '% GA%' then 'GA'
+            |when loc LIKE '% HI%' then 'HI'
+            |when loc LIKE '% ID%' then 'ID'
+            |when loc LIKE '% IL%' then 'IL'
+            |when loc LIKE '% IN%' then 'IN'
+            |when loc LIKE '% IA%' then 'IA'
+            |when loc LIKE '% KS%' then 'KS'
+            |when loc LIKE '% KY%' then 'KY'
+            |when loc LIKE '% LA%' then 'LA'
+            |when loc LIKE '% ME%' then 'ME'
+            |when loc LIKE '% MD%' then 'MD'
+            |when loc LIKE '% MA%' then 'MA'
+            |when loc LIKE '% MI%' then 'MI'
+            |when loc LIKE '% MN%' then 'MN'
+            |when loc LIKE '% MS%' then 'MS'
+            |when loc LIKE '% MO%' then 'MO'
+            |when loc LIKE '% MT%' then 'MT'
+            |when loc LIKE '% NE%' then 'NE'
+            |when loc LIKE '% NV%' then 'NV'
+            |when loc LIKE '% NH%' then 'NH'
+            |when loc LIKE '% NJ%' then 'NJ'
+            |when loc LIKE '% NM%' then 'NM'
+            |when loc LIKE '% NY%' then 'NY'
+            |when loc LIKE '% NC%' then 'NC'
+            |when loc LIKE '% ND%' then 'ND'
+            |when loc LIKE '% OH%' then 'OH'
+            |when loc LIKE '% OK%' then 'OK'
+            |when loc LIKE '% OR%' then 'OR'
+            |when loc LIKE '% PA%' then 'PA'
+            |when loc LIKE '% RI%' then 'RI'
+            |when loc LIKE '% SC%' then 'SC'
+            |when loc LIKE '% SD%' then 'SD'
+            |when loc LIKE '% TN%' then 'TN'
+            |when loc LIKE '% TX%' then 'TX'
+            |when loc LIKE '% UT%' then 'UT'
+            |when loc LIKE '% VT%' then 'VT'
+            |when loc LIKE '% VA%' then 'VA'
+            |when loc LIKE '% WA%' then 'WA'
+            |when loc LIKE '% WV%' then 'WV'
+            |when loc LIKE '% WI%' then 'WI'
+            |when loc LIKE '% WY%' then 'WY'
+            |                       else
+            |                        loc
+            |                        end as state from locate """.stripMargin)
+
+        sql3RDD.createOrReplaceTempView("sql3RDD")
+
+
+        val temp = sqlContext.sql(""" SELECT GOTCharacters, state, count(GOTCharacters) as type_count from sql3RDD group by state, GOTCharacters""")
+        temp.createOrReplaceTempView("temp")
+        val max = sqlContext.sql(""" SELECT state, max(type_count) as max_count from temp group by state""")
+        max.createOrReplaceTempView("max")
+        val tweet_state = sqlContext.sql(""" SELECT GOTCharacters, t.state, type_count from temp t, max m where t.state = m.state and t.type_count = m.max_count """)
+        tweet_state.createOrReplaceTempView("phone_state")
+        println ("**********************************")
+        println("Different types of tweets from different states")
+        println("**********************************")
+        tweet_state.show()
+        tweet_state.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query10")
+
+    }
+  }
+}
