@@ -43,14 +43,14 @@ object queries {
     println("Enter any one of the following query to get data")
     println("1.Query-1:This query fetches the tweets count on hashtags")
     println("2.Query-2:Which user tweeted most about which type of team")
-    println("3.Query-3:Tweets from different countries about ipl")
+    println("3.Query-3:Tweets from different countries about GOT")
     println("4.Query-4:On which day more tweets are done")
-    println("5.Query-5:This query fetches Tweets count for different types of GOTCharacterss")
-    println("6.Query-6:Popular languages used for tweeting tweets about ipl")
+    println("5.Query-5:This query fetches Tweets count for different types of GOTCharacters")
+    println("6.Query-6:Popular languages used for tweeting tweets about GOT")
     println("7.Query-7:Number of tweets for particular date ")
     println("8.Query-8:Account Verification tweets")
     println("9.Query-9:On Which hours More Tweets Were Done")
-    println("10.Query-10:Which state is mostly having tweets about ipl")
+    println("10.Query-10:Which state is mostly having tweets about particular GOTcharacter")
     println("Enter any one of the following query to get data:")
     val count = scala.io.StdIn.readLine()
     count match {
@@ -69,22 +69,9 @@ object queries {
       case "2" =>
 
         val r1 = sqlContext.sql("SELECT UserName,GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters in ('AryaStark') group by UserName,GOTCharacters order by count desc")
-      //  val r2 = sqlContext.sql("SELECT UserName,'SansaStark' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='SansaStark' " +
-        //  "group by UserName order by count desc limit 1 ")
-//        val r3 = sqlContext.sql("SELECT UserName,'JonSnow' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='JonSnow' " +
-//          "group by UserName order by count desc limit 1 ")
-//        val r4 = sqlContext.sql("SELECT UserName,'TyrionLannister' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='TyrionLannister' " +
-//          "group by UserName order by count desc limit 1 ")
-//        val r5 = sqlContext.sql("SELECT UserName,'BranStark' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='BranStark' " +
-//          "group by UserName order by count desc limit 1 ")
-//        val r6 = sqlContext.sql("SELECT UserName,'Daenerys' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='Daenerys' " +
-//          "group by UserName order by count desc limit 1 ")
-//        val r7 = sqlContext.sql("SELECT UserName,'JaimeLannister' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='JaimeLannister' " +
-//          "group by UserName order by count desc limit 1 ")
-//        val r8 = sqlContext.sql("SELECT UserName,'NightKing' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='NightKing' " +
-//          "group by UserName order by count desc limit 1 ")
+      
 
-        val rdd1 = r1//.union(r2).union(r3).union(r4).union(r5).union(r6).union(r7).union(r8)
+        val rdd1 = r1
 
         println("****************************************")
         println("Which user tweeted more on which type of Character")
@@ -135,21 +122,8 @@ object queries {
       case "5" =>
         val r1 = sqlContext.sql("select loc,GotCharacters,count(*) as count from disCat2 " +
           "group by loc,GotCharacters order by count desc")
-//        val r2 = sqlContext.sql("SELECT loc,'SansaStark' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='SansaStark' " +
-//          "group by loc order by count desc limit 10")
-//        val r3 = sqlContext.sql("SELECT loc,'JonSnow' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='JonSnow' " +
-//          "group by loc order by count desc limit 10")
-//        val r4 = sqlContext.sql("SELECT loc,'TyrionLannister' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='TyrionLannister' " +
-//          "group by loc order by count desc limit 10")
-//        val r5 = sqlContext.sql("SELECT loc,'BranStark' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='BranStark' " +
-//          "group by loc order by count desc limit 10")
-//        val r6 = sqlContext.sql("SELECT loc,'Daenerys' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='Daenerys' " +
-//          "group by loc order by count desc limit 10")
-//        val r7 = sqlContext.sql("SELECT loc,'JaimeLannister' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='JaimeLannister' " +
-//          "group by loc order by count desc limit 10")
-//        val r8 = sqlContext.sql("SELECT loc,'NightKing' as GOTCharacters,count(*) as count FROM disCat2 WHERE GOTCharacters='NightKing' " +
-//          "group by loc order by count desc limit 10")
-        val rdd1 = r1//.union(r2).union(r3).union(r4).union(r5).union(r6).union(r7).union(r8)
+      
+        val rdd1 = r1
         rdd1.createOrReplaceTempView("rdd1")
         val res=sqlContext.sql("SELECT GOTCharacters, Count(*) as Count from rdd1 where GOTCharacters is not null group by GOTCharacters")
         println("****************************************")
@@ -204,7 +178,7 @@ object queries {
         println("****************************************")
         langWstDataCount.show()
         langWstDataCount.write.json("C:\\Users\\rahul\\Desktop\\PB Spring2019\\Project\\Phase-2\\query6")
-      /*-----------------------------------Query 7 number of tweets for particular date  -------------------------------------*/
+      /*-----------------------------------Query 7 number of retweets  -------------------------------------*/
       case "7" =>
         val retweetcount=sqlContext.sql("SELECT user.screen_name, COUNT(*) as total FROM tweets WHERE retweeted_status.user is not null GROUP BY user.screen_name ORDER BY total desc LIMIT 5")
         retweetcount.createOrReplaceTempView("retweetcount")
@@ -220,7 +194,7 @@ object queries {
           "when user.verified LIKE '%false%' THEN 'NON-VERIFIED ACCOUNT'"+
           "END AS Verified from tweets where text is not null")
         acctVerify.createOrReplaceTempView("acctVerify")
-        //        var acctVerifydata=sqlContext.sql("SELECT  Verified, Count(Verified) as Count from acctVerify where id is NOT NULL and Verified is not null group by Verified order by Count DESC")
+       
         var acctVerifydata=sqlContext.sql("select sum(case when user.verified = true then 1 else 0 end)Verified,sum(case when user.verified = false then 1 else 0 end)Unverified from tweets")
         println("****************************************")
         println("Account Verification")
@@ -256,11 +230,7 @@ object queries {
       /*-----------------------------------Query 10 Different types of tweets from different states -------------------------------------*/
       case "10" =>
         val AryaStarkRDD =  sqlContext.sql(""" SELECT 'AryaStark' as GOTCharacters, user.location as loc from tweets where text LIKE '%#AryaStark%' """)
-        //val NightKingRDD =  sqlContext.sql(""" SELECT 'NightKing' as GOTcharacter, user.location as loc from tweets where text LIKE '%#NightKing%' """)
-        //val JonSnowRDD =  sqlContext.sql(""" SELECT 'JonSnow' as GOTcharacter, user.location as loc from tweets where text LIKE '%#JonSnow%' """)
-       //val DaenerysRDD =  sqlContext.sql(""" SELECT 'Daenerys' as GOTCharacters, user.location as loc from tweets where text LIKE '%#Daenerys%' """)
-       // val breakRDD =  sqlContext.sql(""" SELECT 'Breakfast' as Mealtype, SUBSTRING(created_at,12,2) as hour, user.location as loc from dfs where text LIKE '%#breakfast%' """)
-     //   val brunchRDD =  sqlContext.sql(""" SELECT 'Brunch' as Mealtype, SUBSTRING(created_at,12,2) as hour, user.location as loc from dfs where text LIKE '%#brunch%' """)
+        
         val sql2RDD = AryaStarkRDD//.union(NightKingRDD).union(JonSnowRDD).union(DaenerysRDD)
         sql2RDD.createOrReplaceTempView("sql2RDD")
         val locate = sqlContext.sql(
@@ -474,7 +444,7 @@ object queries {
         val max = sqlContext.sql(""" SELECT state, max(type_count) as max_count from temp group by state""")
         max.createOrReplaceTempView("max")
         val tweet_state = sqlContext.sql(""" SELECT GOTCharacters, t.state, type_count from temp t, max m where t.state = m.state and t.type_count = m.max_count """)
-        tweet_state.createOrReplaceTempView("phone_state")
+        tweet_state.createOrReplaceTempView("tweet_state")
         println ("**********************************")
         println("Different types of tweets from different states")
         println("**********************************")
