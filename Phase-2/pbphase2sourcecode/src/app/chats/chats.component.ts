@@ -22,7 +22,8 @@ export class ChatsComponent implements OnInit {
   }
 
   ngOnInit() {
-   // this.barcode();
+   //this.barcode();
+
     this.week();
     this.character();
     this.language();
@@ -31,8 +32,8 @@ export class ChatsComponent implements OnInit {
     this.verify2();
     this.userarya();
     this.hash();
-    this.map();
     this.country();
+    this.map();
   }
 
   barcode() {
@@ -77,7 +78,6 @@ export class ChatsComponent implements OnInit {
       {"country":"Deutschland","count":3},
       {"country":"Trinidad and Tobago","count":2},
       {"country":"Pakistan","count":2},
-      {"country":"??","count":2},
       {"country":"Barbados","count":2},
       {"country":"Greece","count":2},
       {"country":"Germany","count":2},
@@ -616,7 +616,6 @@ hash(){
 
 }
 
-
 map(){
   const chart = am4core.create('mapdiv', am4maps.MapChart);
 
@@ -717,7 +716,6 @@ country(){
     {"country":"Deutschland","count":3},
     {"country":"Trinidad and Tobago","count":2},
     {"country":"Pakistan","count":2},
-    {"country":"??","count":2},
     {"country":"Barbados","count":2},
     {"country":"Greece","count":2},
     {"country":"Germany","count":2},
@@ -756,7 +754,7 @@ country(){
   let columnTemplate = series.columns.template;
   columnTemplate.adapter.add("fill", (fill, target) => {
     return chart.colors.getIndex(target.dataItem.index);
-  })
+  });
 
   columnTemplate.adapter.add("stroke", (stroke, target) => {
     return chart.colors.getIndex(target.dataItem.index);
