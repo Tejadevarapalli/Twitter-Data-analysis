@@ -22,7 +22,7 @@ export class ChatsComponent implements OnInit {
   }
 
   ngOnInit() {
-   // this.barcode();
+   this.barcode();
     this.week();
     this.character();
     this.language();
